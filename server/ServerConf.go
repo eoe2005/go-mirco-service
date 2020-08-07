@@ -1,7 +1,5 @@
 package server
 
-import "net"
-
 //监听的端口
 const POST = 3333
 
@@ -16,9 +14,17 @@ func init() {
 	hostConf = make(map[string][]string, 10)
 }
 
-func addHost(host net.Addr) {
+// udp 提供服务注册发现功能
+func udpRun() {
 
 }
-func udpRun() {
+
+// Http 接口
+func httpRun() {
+
+}
+
+// 配置推送功能
+func tcpRun() {
 
 }

@@ -10,6 +10,6 @@ func GetHostByApp(app string) {
 }
 
 //获取配置信息
-func GetConfByKey(key struct){
+func GetConfByKey(key string) {
 
 }
