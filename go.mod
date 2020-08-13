@@ -1,4 +1,4 @@
-module github.com/my/repo
+module github.com/eoe2005/go-mirco-service
 
 go 1.13
 
