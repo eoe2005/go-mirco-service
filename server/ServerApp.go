@@ -6,15 +6,24 @@ import (
 	"net/http"
 )
 
-var port = 9090
+var (
+	port = 9090
+	// AppName 微服务的名字
+	AppName = "app"
+)
 
-// GData saf
+// SetAppName 设置应用的名字
+func SetAppName(name string) {
+	AppName = name
+}
+
+// GData http接口封装的方法
 type GData struct {
 	w http.ResponseWriter
 	r *http.Request
 }
 
-// Success das
+// Success 接口成功之后的调用
 func (g GData) Success(a interface{}) {
 	data := map[string]interface{}{"code": 0, "msg": "", "data": a}
 	r, err := json.Marshal(data)
@@ -33,7 +42,7 @@ func (g GData) Fail(code int, msg string) {
 	}
 }
 
-// HttpFanc das
+// HttpFanc 注册http请求的方法
 type HttpFanc func(g GData)
 
 var (
