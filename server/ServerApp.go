@@ -1,6 +1,8 @@
 package server
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -12,6 +14,26 @@ type GData struct {
 	r *http.Request
 }
 
+// Success das
+func (g GData) Success(a interface{}) {
+	data := map[string]interface{}{"code": 0, "msg": "", "data": a}
+	r, err := json.Marshal(data)
+	if err == nil {
+		g.w.Write(r)
+	}
+
+}
+
+// Fail 失败返回的数据
+func (g GData) Fail(code int, msg string) {
+	data := map[string]interface{}{"code": code, "msg": msg, "data": ""}
+	r, err := json.Marshal(data)
+	if err == nil {
+		g.w.Write(r)
+	}
+}
+
+// HttpFanc das
 type HttpFanc func(g GData)
 
 var (
@@ -79,5 +101,5 @@ func Run() {
 		})
 	}
 
-	http.ListenAndServe("127.0.0.1:8080", nil)
+	http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", port), nil)
 }

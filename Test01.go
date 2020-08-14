@@ -9,7 +9,7 @@ import (
 func main() {
 
 	server.Get("/a", func(u server.GData) {
-		fmt.Printf(" -- > %s \n", u)
+		u.Success("asdfsdf")
 	})
 	server.Any("/b", func(u server.GData) {
 		fmt.Printf(" -- > %s \n", u)
