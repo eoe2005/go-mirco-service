@@ -1,6 +1,7 @@
 package conf
 
 import (
+	"errors"
 	"fmt"
 	"net"
 	"strings"
@@ -21,7 +22,7 @@ var (
 	serverConfLock sync.Mutex
 
 	// 客户端保存的可用服务信息
-	clientService map[string]map[string]int
+	clientService map[string]map[string]int32
 
 	//客户端服务更新锁
 	clientServiceLock sync.Mutex
@@ -38,6 +39,40 @@ var (
 	// 客户端的链接
 	clientConMap map[net.TCPConn]int = map[net.TCPConn]int{}
 )
+
+func getHost(app string) (string, error) {
+	vmap, ok := clientService[app]
+	if ok {
+		var host string
+		var i int32 = 0
+		for h, v := range vmap {
+			if v < i {
+				host = h
+				i = v
+			}
+		}
+		if host == "" {
+			return "", errors.New("没有找到配置")
+		}
+		clientServiceLock.Lock()
+		defer clientServiceLock.Unlock()
+		vmap[host] = i + 1
+		return host, nil
+	}
+	return "", errors.New("没有找到配置")
+}
+
+//GetInt 查询配置中的int
+func GetInt(app, name string) {}
+
+// GetString 查询配置中的字符串
+func GetString(app, name string) {}
+
+// GetMap 查询配置中的Map信息
+func GetMap(app, name string) {}
+
+// GetDoule 查询配置中的浮点数据
+func GetDoule(app, name string) {}
 
 // RunServer 服务器运行方法
 func RunServer(port int) {
@@ -76,6 +111,12 @@ func tcpRun(port int) {
 
 // 处理客户端链接
 func serverProcessClient(con *net.TCPConn) {
+	for app, v := range serverService {
+		for host, _ := range v {
+			sendClient("ad", fmt.Sprintf("%s:%s", app, host))
+		}
+	}
+	//配置中心的数据发送
 
 }
 
